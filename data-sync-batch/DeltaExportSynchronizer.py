@@ -2,16 +2,16 @@ import requests
 import os
 from WriteToObjectStorage import *
 
+
 class DeltaExportSynchronizer:
-    
     # Define link as a private variable using __ (double underscore)
-    #__link = "https://static.openfoodfacts.org/data/delta/index.txt"
+    # __link = "https://static.openfoodfacts.org/data/delta/index.txt"
 
     def __init__(self) -> None:
         self.__link = os.environ.get('OPEN_FOOD_FACT_LINK')
 
     # starting point for the class
-    def getDeltaExportFileNames(self) :
+    def getDeltaExportFileNames(self):
         print("About to retrieve delta files")
         self.__getFileNames()
 
@@ -28,5 +28,3 @@ class DeltaExportSynchronizer:
 
         print('Received Successful response: {}'.format(response.text))
         WriteToObjectStorage(response.text.splitlines()).downloadDeltaFiles()
-    
-#DeltaExportSynchronizer().getDeltaExportFileNames()

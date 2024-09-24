@@ -1,25 +1,21 @@
-import json
 import responses
-import pytest
-import os
 from WriteToObjectStorage import *
 from moto import mock_aws
+import boto3
+
 
 @responses.activate
 @mock_aws
 def test_downloadDeltaFiles(monkeypatch):
-    response_text = ['test.txt']
-    
+    response_text = ['test.txt']   
     s3_client = boto3.client('s3')
     bucket_name = 'test-bucket'
     s3_client.create_bucket(Bucket=bucket_name)
-    
     monkeypatch.setenv('BUCKET_NAME','test-bucket')
     monkeypatch.setenv('FOLDER_NAME','DeltaExports')
     monkeypatch.setenv('FILE_LINK','https://test.example.com/test.txt')
-
     mock_url = 'https://test.example.com/test.txt'
-    mock_response = {'key':'This is a test file'}
+    mock_response = {'key': 'This is a test file'}
 
     responses.add(responses.GET, mock_url, json=mock_response, status=200)
 
