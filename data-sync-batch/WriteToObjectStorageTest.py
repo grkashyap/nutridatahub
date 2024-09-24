@@ -5,35 +5,14 @@ import os
 from WriteToObjectStorage import *
 from moto import mock_aws
 
-@pytest.fixture
-def s3_setup():
-    with mock_aws():
-        s3_client = boto3.client('s3')
-        bucket_name = 'test-bucket'
-        response = s3_client.create_bucket(Bucket=bucket_name, ACL='public-read-write', GrantFullControl='true')
-        bucket_policy = {
-            "Version": "2012-10-17",
-            "Statement": [
-                {
-                    "Effect": "Allow",
-                    "Principal": "*",
-                    "Action": [
-                        "s3:PutObject",
-                        "s3:GetObject"
-                    ],
-                    "Resource": f"arn:aws:s3:::{bucket_name}/*"
-                }
-            ]
-        }
-        #print(f'response is {response}')'
-        s3_client.put_object(Bucket=bucket_name, Key='DeltaExports/file1.txt', Body='Content of file 1')
-        #s3_client.put_bucket_policy(Bucket=bucket_name, Policy=json.dumps(bucket_policy))
-        yield bucket_name
-
 @responses.activate
+@mock_aws
 def test_downloadDeltaFiles(monkeypatch):
     response_text = ['test.txt']
-    bucket_name = s3_setup
+    
+    s3_client = boto3.client('s3')
+    bucket_name = 'test-bucket'
+    s3_client.create_bucket(Bucket=bucket_name)
     
     monkeypatch.setenv('BUCKET_NAME','test-bucket')
     monkeypatch.setenv('FOLDER_NAME','DeltaExports')
@@ -47,9 +26,8 @@ def test_downloadDeltaFiles(monkeypatch):
     write_to_obj_storage = WriteToObjectStorage(responseText=response_text)
     write_to_obj_storage.downloadDeltaFiles()
 
-    #s3_client = boto3.client('s3')
-    #response = s3_client.list_objects_v2(Bucket=bucket_name)
+    response = s3_client.list_objects_v2(Bucket=bucket_name)
 
-    #print(f'response is {response}')
+    print(f'response is {response}')
 
-    #assert 'Contents' in response
+    assert 'Contents' in response
