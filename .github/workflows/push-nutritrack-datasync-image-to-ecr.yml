@@ -21,10 +21,7 @@ jobs:
       id: ecr-login
       uses: aws-actions/amazon-ecr-login@v2
       with:
-        region: ${{ secrets.AWS_REGION }}
-        mask-password: true
-        registry-type: private
-        skip-logout: false
+        registries: ${{ secrets.AWS_ACCOUNT_ID }}
     
     - name: Push to ECR
       run: |
