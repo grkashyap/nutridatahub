@@ -5,7 +5,6 @@ name: nutritrack-datasync-deltaexports-build
 
 on:
   push:
-    branches: [ "main" ]
     paths:
       - 'nutritrack-datasync-deltaexports/*'
   workflow_dispatch:
