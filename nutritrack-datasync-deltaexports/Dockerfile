@@ -4,7 +4,9 @@ WORKDIR /app
 
 ENV PYTHONPATH="/app/src"
 
-RUN pip install boto3 requests
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
 
 COPY ./src ./src
 
