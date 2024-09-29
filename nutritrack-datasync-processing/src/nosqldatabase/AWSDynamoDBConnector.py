@@ -31,7 +31,6 @@ class AWSDynamoDBConnector(ICloudDatabase):
         try:
             with self.table.batch_writer() as batch:
                 for item in items:
-                    print(f'item: {item}')
                     batch.put_item(Item=item)
                     records_added = records_added+1
             return records_added

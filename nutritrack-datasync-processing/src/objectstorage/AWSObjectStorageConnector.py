@@ -82,7 +82,6 @@ class AWSObjectStorageConnector(IObjectStorage):
         database_provider = get_cloud_storage(table_name)
         for json_object in content:
             if json_object:
-                print(f'Json object: {json_object}')
                 database_provider.save_to_db(items=json_object)
                 records_count = records_count+1
         return records_count
