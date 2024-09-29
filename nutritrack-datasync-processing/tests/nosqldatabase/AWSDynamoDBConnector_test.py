@@ -7,7 +7,7 @@ import pytest
 
 @mock_aws
 def test_get_item_from_dynamodb(monkeypatch):
-    monkeypatch.setenv('CLOUD_PROVIDER', 'aws')
+    provider = 'aws'
     table_name = 'TEST_TABLE'
     boto3.setup_default_session()
     client = boto3.resource('dynamodb', region_name='us-east-1')
@@ -17,7 +17,7 @@ def test_get_item_from_dynamodb(monkeypatch):
                         ProvisionedThroughput={'ReadCapacityUnits': 5, 'WriteCapacityUnits': 5})
     key = {'code':'TestUser'}
     table.put_item(Item=key)
-    database_provider = get_cloud_storage(table_name)
+    database_provider = get_cloud_storage(provider, table_name=table_name)
     assert isinstance(database_provider, AWSDynamoDBConnector)
     response = database_provider.get_from_db(key)
     assert is_not(response, None)
@@ -25,7 +25,7 @@ def test_get_item_from_dynamodb(monkeypatch):
 
 @mock_aws
 def test_add_item_to_dynamodb(monkeypatch):
-    monkeypatch.setenv('CLOUD_PROVIDER', 'aws')
+    provider = 'aws'
     table_name = 'TEST_TABLE'
     boto3.setup_default_session()
     client = boto3.resource('dynamodb', region_name='us-east-1')
@@ -33,7 +33,7 @@ def test_add_item_to_dynamodb(monkeypatch):
                         KeySchema=[{'AttributeName':'code','KeyType':'HASH'}],
                         AttributeDefinitions=[{'AttributeName':'code', 'AttributeType':'S'}],
                         ProvisionedThroughput={'ReadCapacityUnits': 5, 'WriteCapacityUnits': 5})
-    database_provider = get_cloud_storage(table_name)
+    database_provider = get_cloud_storage(provider=provider, table_name=table_name)
     assert isinstance(database_provider, AWSDynamoDBConnector)
     items = [{'code': 'TestUser'}]
     records_added = database_provider.save_to_db(items)

@@ -13,7 +13,7 @@ from src.ProcessUploadedFile import lambda_handler
 
 @mock_aws
 def test_stream_gzip_file_content_from_object_storage(monkeypatch):
-    monkeypatch.setenv('CLOUD_PROVIDER','aws')
+    provider = 'aws'
     bucket_name = 'test-bucket'
     file_name = 'test.json.gz'
     json_text = [{'key1':'test1'},{'key2':'test2'}]
@@ -31,7 +31,7 @@ def test_stream_gzip_file_content_from_object_storage(monkeypatch):
     response = client.get_object(Bucket=bucket_name, Key=file_name)
     assert is_not(response, None)
 
-    object_storage_adapter = get_object_storage(bucket_name)
+    object_storage_adapter = get_object_storage(provider=provider, bucket_name=bucket_name)
     file_content = object_storage_adapter.stream_gzip_file_content_from_object_storage(file_name)
     assert isinstance(file_content, Generator)
     first = next(file_content)
@@ -39,7 +39,7 @@ def test_stream_gzip_file_content_from_object_storage(monkeypatch):
 
 @mock_aws
 def test_remove_file_from_object_storage(monkeypatch):
-    monkeypatch.setenv('CLOUD_PROVIDER', 'aws')
+    provider = 'aws'
     bucket_name = 'test-bucket'
     file_name = 'test.txt'
     client = boto3.client('s3')
@@ -48,7 +48,7 @@ def test_remove_file_from_object_storage(monkeypatch):
     response = client.get_object(Bucket=bucket_name, Key=file_name)
     assert response['ResponseMetadata']['HTTPStatusCode'] == 200
 
-    object_storage_adapter = get_object_storage(bucket_name)
+    object_storage_adapter = get_object_storage(provider=provider, bucket_name=bucket_name)
     object_storage_adapter.remove_file_from_object_storage(file_name)
 
     try:
@@ -59,10 +59,10 @@ def test_remove_file_from_object_storage(monkeypatch):
 
 @mock_aws
 def test_process_file_from_event(monkeypatch):
-    monkeypatch.setenv('CLOUD_PROVIDER', 'aws')
+    monkeypatch.setenv('CLOUD_PROVIDER','aws')
 
     # create aws dynamo db table
-    table_name = 'TEST_TABLE'
+    table_name = 'nutri_fact'
     client = boto3.resource('dynamodb', region_name='us-east-1')
     client.create_table(TableName=table_name,
                                 KeySchema=[{'AttributeName': 'code', 'KeyType': 'HASH'}],
@@ -86,9 +86,6 @@ def test_process_file_from_event(monkeypatch):
     client.upload_fileobj(io.BytesIO(compressed_data), bucket_name, file_name)
     response = client.get_object(Bucket=bucket_name, Key=file_name)
     assert is_not(response, None)
-
-    monkeypatch.setenv('BUCKET_NAME',bucket_name)
-    monkeypatch.setenv('TABLE_NAME', table_name)
 
     # simulate the event
     event = {

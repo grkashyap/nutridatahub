@@ -4,8 +4,7 @@ from src.objectstorage.AWSObjectStorageConnector import AWSObjectStorageConnecto
 from src.objectstorage.IObjectStorage import IObjectStorage
 
 
-def get_object_storage(bucket_name) -> IObjectStorage:
-    provider = os.getenv('CLOUD_PROVIDER')
+def get_object_storage(provider, bucket_name) -> IObjectStorage:
 
     if provider == 'aws':
         return AWSObjectStorageConnector(bucket_name)

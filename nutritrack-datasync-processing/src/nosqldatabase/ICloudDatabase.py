@@ -16,7 +16,7 @@ class ICloudDatabase(ABC):
         raise MethodNotImplementedException("This method is not implemented")
 
     @abstractmethod
-    def save_to_db(self, item):
+    def save_to_db(self, items):
         """
         Subclasses should implement this method with logic specific to that database
         :param item: Key:value pair to store data to a document database like AWS dynamo db

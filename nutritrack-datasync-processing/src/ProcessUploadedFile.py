@@ -1,3 +1,4 @@
+import configparser
 import os
 
 from src.objectstorage.GetObjectStorage import get_object_storage
@@ -9,10 +10,17 @@ def lambda_handler(event, context):
     :param event:
     :param context:
     """
-    bucket_name = os.environ.get('BUCKET_NAME')
-    print(f'Processing files from bucket: {bucket_name}')
-    object_storage_adapter = get_object_storage(bucket_name=bucket_name)
-    object_storage_adapter.process_file_from_event(event)
+    provider = os.environ.get('CLOUD_PROVIDER')
+
+    config = configparser.ConfigParser()
+    config_path = os.path.join(os.path.dirname(__file__), 'config.ini')
+    config.read(config_path)
+
+    bucket_name = config.get(provider, 'bucket_name')
+    table_name = config.get(provider,'table_name')
+    print(f'Processing files from bucket: {bucket_name} for provider: {provider}')
+    object_storage_adapter = get_object_storage(provider=provider, bucket_name=bucket_name)
+    object_storage_adapter.process_file_from_event(event=event, table_name=table_name, provider=provider)
     print('Completed processing')
 
     return {

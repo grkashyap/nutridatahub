@@ -58,7 +58,7 @@ class AWSObjectStorageConnector(IObjectStorage):
             logging.error(e)
             return False
 
-    def process_file_from_event(self, event):
+    def process_file_from_event(self, event, table_name, provider):
         """
         This method takes the event as input and reads the file content and write to dynamodb
         :param event: event which triggered this lambda function
@@ -68,18 +68,17 @@ class AWSObjectStorageConnector(IObjectStorage):
             file_name = record['s3']['object']['key']
             print(f'About to process {file_name} from bucket: {self.bucket_name}')
             content = self.stream_gzip_file_content_from_object_storage(file_name=file_name)
-            records_processed = self.__process_content(content)
+            records_processed = self.__process_content(content=content, table_name=table_name, provider=provider)
             print(f'Processed {records_processed} records from file {file_name}')
 
-    def __process_content(self, content):
+    def __process_content(self, content, table_name, provider):
         """
         This method takes a generator which contains the jsonl objects and writes to dynamo db
         :param content: generator which contains file contents
         :return: number of records added to amazon dynamo db
         """
         records_count = 0
-        table_name = os.environ.get("TABLE_NAME")
-        database_provider = get_cloud_storage(table_name)
+        database_provider = get_cloud_storage(provider=provider, table_name=table_name)
         for json_object in content:
             if json_object:
                 database_provider.save_to_db(items=json_object)
