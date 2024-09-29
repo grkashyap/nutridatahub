@@ -15,7 +15,7 @@ class AWSDynamoDBConnector(ICloudDatabase):
         :param table_name: name of the table for which dynamodb object should be initialized
         """
         try:
-            dynamo_db = boto3.resource('dynamodb')
+            dynamo_db = boto3.resource('dynamodb', region_name='us-east-1')
             self.table = dynamo_db.Table(table_name)
         except Exception as e:
             print(f'Error connecting to dynamo db: {e}')
