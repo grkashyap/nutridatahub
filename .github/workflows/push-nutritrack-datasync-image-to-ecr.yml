@@ -13,7 +13,8 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build the Docker image
       run: | 
-        docker build . --file nutritrack-datasync-deltaexports/Dockerfile --tag nutritrack-datasync/deltaexports:latest
+        cd nutritrack-datasync-deltaexports/
+        docker build . --tag nutritrack-datasync/deltaexports:latest
         docker tag nutritrack-datasync/deltaexports:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/nutritrack-datasync/deltaexports:latest
     
     - name: login to amazon ecr
