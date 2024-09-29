@@ -1,0 +1,25 @@
+name: Build nutritrack-datasync-deltaexports docker file and push to ECR
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:      
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: | 
+        docker build . --file nutritrack-datasync-deltaexports/Dockerfile --tag nutritrack-datasync/deltaexports:latest
+        docker tag nutritrack-datasync/deltaexports:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/nutritrack-datasync/deltaexports:latest
+    
+    - name: login to amazon ecr
+      id: ecr-login
+      uses: aws-actions/amazon-ecr-login@v2
+    
+    - name: Push to ECR
+      run: |
+        docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/nutritrack-datasync/deltaexports:latest
