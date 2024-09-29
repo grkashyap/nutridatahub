@@ -11,14 +11,18 @@ def download_delta_files():
     Method to download delta files from open food fact server and upload to s3
     :return: None
     """
-    print('About to retrieve delta files from internet')
+
+    provider = os.environ.get('CLOUD_PROVIDER')
+
+    print(f'About to retrieve delta files from internet for provider: {provider}')
+
     config = configparser.ConfigParser()
     config_path = os.path.join(os.path.dirname(__file__), 'config.ini')
     config.read(config_path)
 
     open_food_fact_url = config.get('OPEN_FOOD_FACT','open_food_fact_link')
     delta_file_link = config.get('OPEN_FOOD_FACT','delta_file_link')
-    bucket_name = config.get('OPEN_FOOD_FACT','bucket_name')
+    bucket_name = config.get(provider,'bucket_name')
 
     try:
         response = requests.get(open_food_fact_url)
@@ -30,7 +34,7 @@ def download_delta_files():
     delta_files_list = response.text.splitlines()
     print('Number of files to process: ',len(delta_files_list))
 
-    object_storage_connector = get_object_storage(bucket_name=bucket_name)
+    object_storage_connector = get_object_storage(provider=provider, bucket_name=bucket_name)
 
     for file_name in delta_files_list:
         file_url = delta_file_link.format(filename=file_name)
@@ -43,5 +47,5 @@ def download_delta_files():
 
         object_storage_connector.upload_object_to_bucket(file_name=file_name, file_content=response.content)
 
-if __name__ == 'main':
+if __name__ == '__main__':
     download_delta_files()
