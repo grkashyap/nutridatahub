@@ -35,13 +35,14 @@ def test_add_item_to_dynamodb(monkeypatch):
                         ProvisionedThroughput={'ReadCapacityUnits': 5, 'WriteCapacityUnits': 5})
     database_provider = get_cloud_storage(table_name)
     assert isinstance(database_provider, AWSDynamoDBConnector)
-    item = {'code': 'TestUser'}
-    response_add = database_provider.save_to_db(item)
-    assert is_not(response_add, None)
-    assert response_add['ResponseMetadata']['HTTPStatusCode'] == 200
-    response_read = database_provider.get_from_db(item)
-    assert is_not(response_read, None)
-    assert response_read['code'] == 'TestUser'
+    items = [{'code': 'TestUser'}]
+    records_added = database_provider.save_to_db(items)
+    assert records_added>0
+    item = {'code':'TestUser'}
+    response = database_provider.get_from_db(item)
+    assert is_not(response, None)
+    assert response['code'] == 'TestUser'
+
 
 if __name__ == 'main':
     pytest.main()

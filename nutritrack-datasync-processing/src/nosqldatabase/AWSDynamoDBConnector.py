@@ -20,16 +20,21 @@ class AWSDynamoDBConnector(ICloudDatabase):
         except Exception as e:
             print(f'Error connecting to dynamo db: {e}')
 
-    def save_to_db(self, item):
+    def save_to_db(self, items):
         """
         This method will save data to AWS dynamo db and returns the response
         If there is an exception during the save operation, an error is thrown
-        :param item: Json object which will be stored to AWS dynamo db
-        :return: Any: response from aws dynamo db
+        :param items: Json object which will be stored to AWS dynamo db
+        :return: records added: Number of records added to dynamo db table
         """
+        records_added = 0
         try:
-            response = self.table.put_item(Item=item)
-            return response
+            with self.table.batch_writer() as batch:
+                for item in items:
+                    print(f'item: {item}')
+                    batch.put_item(Item=item)
+                    records_added = records_added+1
+            return records_added
         except Exception as e:
             print(f'Error adding an item: {e}')
 
