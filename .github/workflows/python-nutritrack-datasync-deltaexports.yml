@@ -8,6 +8,8 @@ on:
     branches: [ "main" ]
     paths:
       - 'nutritrack-datasync-deltaexports/*'
+  workflow_dispatch:
+    
 
 permissions:
   contents: read
