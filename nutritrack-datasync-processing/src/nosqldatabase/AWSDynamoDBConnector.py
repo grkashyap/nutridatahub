@@ -25,17 +25,22 @@ class AWSDynamoDBConnector(ICloudDatabase):
         This method will save data to AWS dynamo db and returns the response
         If there is an exception during the save operation, an error is thrown
         :param items: Json object which will be stored to AWS dynamo db
-        :return: records added: Number of records added to dynamo db table
+        :return: records_added, records_in_error, total_records: Tuple of records added and records in error
         """
         records_added = 0
-        try:
-            with self.table.batch_writer() as batch:
-                for item in items:
+        records_in_error = 0
+        total_records = 0
+        with self.table.batch_writer() as batch:
+            for item in items:
+                try:
                     batch.put_item(Item=item)
                     records_added = records_added+1
-            return records_added
-        except Exception as e:
-            print(f'Error adding an item: {e}')
+                except Exception as e:
+                    print(f'Exception {e} occurred while processing {item}')
+                    records_in_error = records_in_error + 1
+            total_records = total_records+1
+
+        return records_added, records_in_error, total_records
 
     def get_from_db(self, key):
         """

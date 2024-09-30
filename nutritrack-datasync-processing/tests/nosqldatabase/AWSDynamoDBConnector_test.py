@@ -36,8 +36,10 @@ def test_add_item_to_dynamodb(monkeypatch):
     database_provider = get_cloud_storage(provider=provider, table_name=table_name)
     assert isinstance(database_provider, AWSDynamoDBConnector)
     items = [{'code': 'TestUser'}]
-    records_added = database_provider.save_to_db(items)
-    assert records_added>0
+    records_processed, records_in_error, total_records = database_provider.save_to_db(items)
+    assert records_processed > 0
+    assert records_in_error == 0
+    assert total_records > 0
     item = {'code':'TestUser'}
     response = database_provider.get_from_db(item)
     assert is_not(response, None)

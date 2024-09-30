@@ -71,20 +71,24 @@ class AWSObjectStorageConnector(IObjectStorage):
             content = self.stream_gzip_file_content_from_object_storage(file_name=file_name)
             if content is None:
                 return False
-            records_processed = self.__process_content(content=content, table_name=table_name, provider=provider)
-            print(f'Processed {records_processed} records from file {file_name}')
+            records_processed, records_in_error, total_records = self.__process_content(content=content, table_name=table_name, provider=provider)
+            print(f'Total records in file {file_name} is {total_records}')
+            print(f'Records processed successfully - {records_processed}')
+            print(f'Records in error - {records_in_error}')
+
+            # Ideally we should return false event if one record is in error
+            if total_records > 0 and records_processed == 0:
+                return False
+
             return True
 
     def __process_content(self, content, table_name, provider):
         """
         This method takes a generator which contains the jsonl objects and writes to dynamo db
         :param content: generator which contains file contents
-        :return: number of records added to amazon dynamo db
+        :return: records_added, records_in_error: Tuple of records added and records in error
         """
-        records_count = 0
         database_provider = get_cloud_storage(provider=provider, table_name=table_name)
-        for json_object in content:
-            if json_object:
-                database_provider.save_to_db(items=json_object)
-                records_count = records_count+1
-        return records_count
+        records_added, records_in_error, total_records = database_provider.save_to_db(items=content)
+        return records_added, records_in_error, total_records
+

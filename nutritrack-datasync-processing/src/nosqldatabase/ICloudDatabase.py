@@ -20,7 +20,7 @@ class ICloudDatabase(ABC):
         """
         Subclasses should implement this method with logic specific to that database
         :param item: Key:value pair to store data to a document database like AWS dynamo db
-        :return: Any: response from the operation
+        :return: records_processed, records_in_error, total_Records: tuple
         """
         raise MethodNotImplementedException("This method is not implemented")
 

@@ -65,25 +65,26 @@ def test_process_file_from_event(monkeypatch):
     table_name = 'nutri_fact'
     client = boto3.resource('dynamodb', region_name='us-east-1')
     client.create_table(TableName=table_name,
-                                KeySchema=[{'AttributeName': 'code', 'KeyType': 'HASH'}],
-                                AttributeDefinitions=[{'AttributeName': 'code', 'AttributeType': 'S'}],
+                                KeySchema=[{'AttributeName': '_id', 'KeyType': 'HASH'},{'AttributeName': 'nutriscore_tags', 'KeyType': 'HASH'}],
+                                AttributeDefinitions=[{'AttributeName': '_id', 'AttributeType': 'S'}, {'AttributeName': 'nutriscore_tags', 'AttributeType': 'S'}],
                                 ProvisionedThroughput={'ReadCapacityUnits': 5, 'WriteCapacityUnits': 5})
 
     # create s3 bucket
     bucket_name = 'test-bucket'
     file_name = 'test.json.gz'
-    json_text = [{'code': 'test1'}, {'code': 'test2'}]
+    json_text = {
+            '_id': '5350804020038',
+            'nutriscore_tags': 'not-applicable'
+            }
     json_string = json.dumps(json_text)
     compressed_stream = io.BytesIO()
-    with gzip.GzipFile(mode='wb', fileobj=compressed_stream) as gz:
-        gz.write(json_string.encode('utf-8'))
-    compressed_data = compressed_stream.getvalue()
-    with open('test_data.json.gz', 'wb') as f:
-        f.write(compressed_data)
+
+    with gzip.open(file_name, 'wt', encoding='utf-8') as gz_file:
+        json.dump(json_text, gz_file)
 
     client = boto3.client('s3')
     client.create_bucket(Bucket=bucket_name)
-    client.upload_fileobj(io.BytesIO(compressed_data), bucket_name, file_name)
+    client.upload_file(file_name, bucket_name, file_name)
     response = client.get_object(Bucket=bucket_name, Key=file_name)
     assert is_not(response, None)
 
