@@ -19,5 +19,5 @@ class IObjectStorage(ABC):
         raise MethodNotImplementedException(self.__ERROR_MESSAGE)
 
     @abstractmethod
-    def process_file_from_event(self, event):
+    def process_file_from_event(self, event, table_name, provider):
         raise MethodNotImplementedException(self.__ERROR_MESSAGE)

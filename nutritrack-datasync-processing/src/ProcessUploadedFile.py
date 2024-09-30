@@ -6,9 +6,18 @@ from src.objectstorage.GetObjectStorage import get_object_storage
 
 def lambda_handler(event, context):
     """
-    This method is invoked when a file is uploaded to object storage
-    :param event:
+    This method is invoked from AWS lambda
+    :param event: Event from AWS lambda
     :param context:
+    : return: returns response from process_file method
+    """
+    return process_file(event)
+
+def process_file(event):
+    """
+    This method takes event object from AWS lambda and processes it
+    :param event:
+    :return: Success or failure response based on whether the file is successfully processed
     """
     provider = os.environ.get('CLOUD_PROVIDER')
 
@@ -17,13 +26,27 @@ def lambda_handler(event, context):
     config.read(config_path)
 
     bucket_name = config.get(provider, 'bucket_name')
-    table_name = config.get(provider,'table_name')
+    table_name = config.get(provider, 'table_name')
     print(f'Processing files from bucket: {bucket_name} for provider: {provider}')
     object_storage_adapter = get_object_storage(provider=provider, bucket_name=bucket_name)
-    object_storage_adapter.process_file_from_event(event=event, table_name=table_name, provider=provider)
-    print('Completed processing')
+    try:
+        object_storage_adapter.process_file_from_event(event=event, table_name=table_name, provider=provider)
+        print('Completed processing')
+    except Exception as e:
+        print(f'Error occurred while processing files: {e}')
+
+    return send_success_response()
+
+def send_success_response():
 
     return {
         'statusCode': 200,
-        'body': f'Processed file in bucket: {bucket_name}'
+        'body': 'Successfully processed file'
+    }
+
+def send_failure_response():
+
+    return {
+        'statusCode': 500,
+        'body': 'Error occurred while processing file'
     }
