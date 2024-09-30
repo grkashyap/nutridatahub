@@ -29,12 +29,10 @@ def process_file(event):
     table_name = config.get(provider, 'table_name')
     print(f'Processing files from bucket: {bucket_name} for provider: {provider}')
     object_storage_adapter = get_object_storage(provider=provider, bucket_name=bucket_name)
-    try:
-        object_storage_adapter.process_file_from_event(event=event, table_name=table_name, provider=provider)
-        print('Completed processing')
-    except Exception as e:
-        print(f'Error occurred while processing files: {e}')
-
+    response = object_storage_adapter.process_file_from_event(event=event, table_name=table_name, provider=provider)
+    if response is False:
+        return send_failure_response()
+    
     return send_success_response()
 
 def send_success_response():

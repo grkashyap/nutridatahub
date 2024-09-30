@@ -43,6 +43,7 @@ class AWSObjectStorageConnector(IObjectStorage):
                     yield json_object
         except ClientError as e:
             logging.error(e)
+            return None
 
     def remove_file_from_object_storage(self, file_name):
         """
@@ -68,8 +69,11 @@ class AWSObjectStorageConnector(IObjectStorage):
             file_name = record['s3']['object']['key']
             print(f'About to process {file_name} from bucket: {self.bucket_name}')
             content = self.stream_gzip_file_content_from_object_storage(file_name=file_name)
+            if content is None:
+                return False
             records_processed = self.__process_content(content=content, table_name=table_name, provider=provider)
             print(f'Processed {records_processed} records from file {file_name}')
+            return True
 
     def __process_content(self, content, table_name, provider):
         """
