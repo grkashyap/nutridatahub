@@ -21,7 +21,8 @@ def test_download_delta_files(monkeypatch):
     s3_client = boto3.client('s3')
     s3_client.create_bucket(Bucket=bucket_name)
 
-    download_delta_files()
+    response_from_service = download_delta_files()
+    print(response_from_service)
 
     response = s3_client.list_objects_v2(Bucket=bucket_name)
     assert response['ResponseMetadata']['HTTPStatusCode'] == 200
