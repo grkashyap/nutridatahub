@@ -49,21 +49,21 @@ def download_delta_files():
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
             print(f'Error while reading file {file_name} from url {file_url} : {e}')
-            return return_failure_response(e)
+            return send_failure_response(e)
 
         object_storage_connector.upload_object_to_bucket(file_name=file_name, file_content=response.content)
         actual_exported_files = actual_exported_files+1
 
-    return return_success_response(num_files=actual_exported_files)
+    return send_success_response(num_files=actual_exported_files)
 
 
-def return_success_response(num_files):
+def send_success_response(num_files):
     return {
         "statusCode": 200,
         "body": f'Successfully uploaded {num_files} to object storage'
     }
 
-def return_failure_response(error):
+def send_failure_response(error):
     return {
         "statusCode": 500,
         "body": f'Failed to upload files due to error: {error}'
