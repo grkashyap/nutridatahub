@@ -1,6 +1,9 @@
-const handler = require('../dist/index');
-const axios = require('axios');
+//const handler = require('../dist/index');
+//const axios = require('axios');
 //const axios = axios_var();
+
+import handler from '../dist/index';
+import axios from 'axios';
 
 const mockData = { 
     "status": 200,
