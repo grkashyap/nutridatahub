@@ -1,8 +1,13 @@
+import './SearchField.css';
 
 function SearchField() {
 
     return (
-        <h1>SearchField</h1>
+        <div className="search-form">
+            <form action='#'>
+                <input className="search-field" placeholder="Search for Products" />
+            </form>
+        </div>
     )
 }
 

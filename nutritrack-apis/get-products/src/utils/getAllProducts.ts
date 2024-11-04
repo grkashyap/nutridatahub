@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { result } from './types'
-
-axios.defaults.baseURL = "https://world.openfoodfacts.net/cgi";
-axios.defaults.headers['User-Agent'] = 'nutritrack/1.0.0'
+import { result } from './types';
 
 async function getAllProducts(searchTerm: string, pageNo?: Number) : Promise<result> {
-    
+
+    axios.defaults.baseURL = "https://world.openfoodfacts.net/cgi";
+    axios.defaults.headers['User-Agent'] = 'nutritrack/1.0.0'
+  
     const result = {} as result;
 
     try {

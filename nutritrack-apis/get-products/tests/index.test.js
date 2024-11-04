@@ -1,9 +1,5 @@
-//const handler = require('../dist/index');
-//const axios = require('axios');
-//const axios = axios_var();
-
-import handler from '../dist/index';
-import axios from 'axios';
+const handler = require('../dist/index');
+const axios = require('axios');
 
 const mockData = { 
     "status": 200,
@@ -12,7 +8,10 @@ const mockData = {
 
 jest.mock('axios', () => {
     return {
-        get: jest.fn().mockResolvedValue(mockData)
+        get: jest.fn().mockResolvedValue({ 
+            "status": 200,
+            "data": {"products": [{"_id":"12345", "product_name":"Test Product", "product_name_en": "Test Product"}]}        
+        })
     }
 });
 
@@ -27,7 +26,7 @@ test("Check whether response is successful", async () => {
         }
     }
 
-    const response = await handler(event);
+    const response = await handler.handler(event);
 
     expect(response.statusCode).toBe(200);
         expect(JSON.parse(JSON.stringify(response))).toEqual({
@@ -44,7 +43,7 @@ test('Should handle error from Axios', async() => {
             "search_term": "Coke"
         }
     }
-    const response = await handler(event);
+    const response = await handler.handler(event);
     expect(response.statusCode).toBe(500);
 });
 
@@ -61,7 +60,7 @@ test('Should return successful response for second page', async() => {
             "page_num": 2
         }
     }
-    const response = await handler(event);
+    const response = await handler.handler(event);
     
     expect(response.statusCode).toBe(200);
     expect(JSON.parse(JSON.stringify(response))).toEqual({
