@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
-        "module": "ES2022",
-        "target": "ESNext",
+        "module": "commonjs",
+        "target": "es2016",
         "noImplicitAny": true,
         "removeComments": true,
         "preserveConstEnums": true,
@@ -9,7 +9,9 @@
         "moduleResolution": "node",
         "outDir": "./dist",
         "esModuleInterop": true,
-        "alwaysStrict": true
+        "alwaysStrict": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true
     },
     "include": ["src/**/*"]
 }
