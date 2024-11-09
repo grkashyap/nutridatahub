@@ -1,0 +1,34 @@
+name: Build nutritrack-apis-get-products docker file and push to ECR
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:      
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: | 
+        cd nutritrack-apis/get-products/
+        docker build . --tag nutritrack-api/get-products:latest
+        docker tag nutritrack-api/get-products:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/nutritrack-api/get-products:latest
+  
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: ${{ secrets.AWS_REGION }}
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-actions
+    
+    - name: login to amazon ecr
+      id: ecr-login
+      uses: aws-actions/amazon-ecr-login@v2
+    
+    - name: Push to ECR
+      run: |
+        docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/nutritrack-api/get-products:latest
