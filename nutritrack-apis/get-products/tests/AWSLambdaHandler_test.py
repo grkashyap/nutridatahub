@@ -21,6 +21,21 @@ def test_lambda_event_handler(monkeypatch):
     assert response['body']['page_size'] == 20
     assert '_id' in response['body']['products'][0]
 
+def test_lambda_event_handler_no_params(monkeypatch):
+    env_name = 'URL'
+    env_value = 'https://world.openfoodfacts.net/cgi/search.pl'
+    monkeypatch.setenv(env_name, env_value)
+
+    event = {
+        'queryStringParameters': {
+        }
+    }
+
+    response = lambda_handler(event=event, context=None)
+
+    assert response['statusCode'] == 500
+    assert response['body'] == 'Search term is not populated'
+
 
 if __name__ == '__main__':
     pytest.main()

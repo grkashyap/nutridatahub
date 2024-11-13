@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  GetProductsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src.AWSLambdaHandler.lambda_handler
+      Runtime: python3.12
+      CodeUri: .
+      MemorySize: 128
+      Timeout: 5
+      Environment:
+        Variables:
+          STAGE: !Ref "AWS::Stage"
+          URL: 'https://world.openfoodfacts.net/cgi/search.pl'
+
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: GetProductsApi
+      StageName: prod
+      DefinitionBody:
+        swagger: '2.0'
+        info:
+          title: 'Get Products API'
+          version: '1.0'
+        paths:
+          /products:
+            get:
+              summary: 'Get Products'
+              operationId: 'getProducts'
+              responses:
+                200:
+                  description: 'Successful response'
+                  schema:
+                    type: 'string'
+              x-amazon-apigateway-integration:
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetProductsFunction.Arn}/invocations
+                httpMethod: GET
+                type: aws_proxy
+
+  LambdaApiGatewayInvokePolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: LambdaApiGatewayInvokePolicy
+      Roles:
+        - !GetAtt GetProductsFunctionRole.Arn
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'lambda:InvokeFunction'
+            Resource: !GetAtt GetProductsFunction.Arn
+
+Outputs:
+  ApiUrl:
+    Description: 'API Gateway URL'
+    Value: !Sub 'https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/prod/products'
