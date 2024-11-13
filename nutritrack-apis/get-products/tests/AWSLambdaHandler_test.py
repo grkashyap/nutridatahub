@@ -36,6 +36,14 @@ def test_lambda_event_handler_no_params(monkeypatch):
     assert response['statusCode'] == 500
     assert response['body'] == 'Search term is not populated'
 
+def test_lambda_event_handler_no_event():
+
+    event = { }
+    response = lambda_handler(event=event, context=None)
+
+    assert response['statusCode'] == 500
+    assert response['body'] == 'An error occurred while processing the request'
+
 
 if __name__ == '__main__':
     pytest.main()

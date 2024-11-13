@@ -1,6 +1,7 @@
 import os
 import requests
 from src.utils.RequestException import RequestException
+import logging
 
 
 class GetProducts:
@@ -8,6 +9,7 @@ class GetProducts:
     # Declare variables
     search_term = None
     page_num = None
+    logger = logging.getLogger('Get Products')
 
     def __init__(self, search_term, page_num=1):
         """
