@@ -35,6 +35,11 @@ class GetProducts:
         # Default response. Processing should not reach here if the request is successful
         return {
             "statusCode": 500,
+            "headers": {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, GET'
+            },
             "body": "Error occurred while processing the request"
         }
 
@@ -61,6 +66,11 @@ class GetProducts:
             if response.status_code == 200:
                 return {
                     "statusCode": response.status_code,
+                    "headers": {
+                        'Access-Control-Allow-Headers': 'Content-Type',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': 'POST, GET'
+                    },
                     "body": response.json()
                 }
 

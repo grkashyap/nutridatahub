@@ -16,14 +16,23 @@ def lambda_handler(event, context) :
         logger.error('Query String parameters are blank')
         return {
             "statusCode": 500,
+            "headers": {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, GET'
+            },
             "body": "An error occurred while processing the request"
         }
-
     # return an error if search_term is not populated in query parameters
     if 'search_term' not in event['queryStringParameters']:
         logger.error('Search term is blank')
         return {
             "statusCode": 500,
+            "headers": {
+                'Access-Control-Allow-Headers': 'Content-Type',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Methods': 'POST, GET'
+            },
             "body": "Search term is not populated"
         }
 

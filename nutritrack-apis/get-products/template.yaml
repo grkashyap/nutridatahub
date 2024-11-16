@@ -20,6 +20,10 @@ Resources:
     Properties:
       Name: GetProductsApi
       StageName: prod
+      Cors:
+        AllowMethods: "'POST, GET'"
+        AllowHeaders: "'X-Forwarded-For'"
+        AllowOrigin: "'*'"
       DefinitionBody:
         swagger: '2.0'
         info:
