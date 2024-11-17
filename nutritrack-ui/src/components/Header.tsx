@@ -8,15 +8,15 @@ export default function Header() {
 
     return (
         <header className='bg-white'>
-            <nav aria-label='Global' className='mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8'>
+            <nav aria-label='Global' className='mx-auto flex items-center justify-between p-6 lg:px-8'>
                 <div className='flex lg:flex-1'>
-                    <a href='/' className='-m-1.5 p-1.5'>
+                    <a href='/' className='-m-1.5 p-1.5 flex'>
                         <span className='sr-only'>NutriTrack</span>
                         <img
                             alt=""
                             src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-                            className="h-8 w-auto"
-                        />
+                            className="h-6 w-auto" />
+                        <span className='antialiased sm:subpixel-antialiased md:antialiased uppercase pl-2'>NutriTrack</span>
                     </a>
                 </div>
                 <div className='flex lg:hidden'>
@@ -29,8 +29,11 @@ export default function Header() {
                 </button>
                 </div>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                    <a href="/" className="text-sm/6 font-semibold text-gray-900">
+                    <a href="/" className="text-sm/6 font-semibold text-blue-500 bg-opacity-100 hover:bg-red-200">
                         Log in <span aria-hidden="true">&rarr;</span>
+                    </a>
+                    <a href="/" className="text-sm/6 font-semibold text-purple-500 ml-4 bg-opacity-100 hover:bg-red-200">
+                        Sign up <span aria-hidden="true">&uarr;</span>
                     </a>
                 </div>
             </nav>
@@ -49,6 +52,9 @@ export default function Header() {
                                 <div className="py-6">
                                     <a href="/" className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">
                                         Log in
+                                    </a>
+                                    <a href="/" className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">
+                                        Sign up
                                     </a>
                                 </div>
                             </div>
