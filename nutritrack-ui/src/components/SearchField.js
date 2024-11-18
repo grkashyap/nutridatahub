@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { getProducts } from "../utils/getData";
+import { getProducts } from "../utils/GetData";
 
 function SearchField() {
 
-    const [searchTerm, setSearchTermValue] = useState<string>('');
+    const [searchTerm, setSearchTermValue] = useState('');
 
-    const onFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const onFormSubmit = (event) => {
         event.preventDefault();
         getProducts(searchTerm);
     }
 
-    const onInputValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const onInputValueChange = (event) => {
         setSearchTermValue(event.target.value);
     }
 
