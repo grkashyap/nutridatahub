@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { getProducts } from "../utils/GetData";
+import ProductResultsContext from "../context/Products";
 
 function SearchField() {
 
     const [searchTerm, setSearchTermValue] = useState('');
 
-    const onFormSubmit = (event) => {
+    const { updateSearchResults } = useContext(ProductResultsContext);
+
+    const onFormSubmit = async (event) => {
         event.preventDefault();
-        getProducts(searchTerm);
+        const results = await getProducts(searchTerm);
+        updateSearchResults(results);
     }
 
     const onInputValueChange = (event) => {

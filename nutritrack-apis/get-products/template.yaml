@@ -9,7 +9,7 @@ Resources:
       Runtime: python3.12
       CodeUri: .
       MemorySize: 128
-      Timeout: 5
+      Timeout: 30
       Environment:
         Variables:
           STAGE: !Ref "AWS::Stage"
