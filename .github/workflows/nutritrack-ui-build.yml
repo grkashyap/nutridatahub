@@ -32,5 +32,6 @@ jobs:
 
     - name: Push to s3 bucket
       run: |
+        cd nutritrack-ui
         aws s3 sync build s3://nutritrack-ui 
       
