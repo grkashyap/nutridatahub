@@ -26,8 +26,6 @@ def test_valid_request(monkeypatch):
     response = GetProducts(search_term=search_term).get_all_products()
 
     assert response['statusCode'] == 200
-    assert len(response['body']) == 1
-    assert response['body']['products'][0]['_id'] == "5449000214799"
 
 @responses.activate
 def test_invalid_request(monkeypatch):

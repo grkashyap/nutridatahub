@@ -1,3 +1,5 @@
+import ast
+import json
 import os
 import requests
 from src.utils.RequestException import RequestException
@@ -63,6 +65,8 @@ class GetProducts:
             response = requests.get(url=url, params=request_params, timeout=60, allow_redirects=False, headers=request_headers)
             response.raise_for_status()
 
+            print(response)
+
             if response.status_code == 200:
                 return {
                     "statusCode": response.status_code,
@@ -71,7 +75,7 @@ class GetProducts:
                         'Access-Control-Allow-Origin': '*',
                         'Access-Control-Allow-Methods': 'POST, GET'
                     },
-                    "body": response.json()
+                    "body": json.dumps(response.json())
                 }
 
         except requests.exceptions.HTTPError as e:

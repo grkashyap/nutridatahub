@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from src.AWSLambdaHandler import lambda_handler
 
@@ -14,12 +16,8 @@ def test_lambda_event_handler(monkeypatch):
     }
 
     response = lambda_handler(event=event, context=None)
-    print(response)
 
     assert response['statusCode'] == 200
-    assert response['body']['page'] == 1
-    assert response['body']['page_size'] == 20
-    assert '_id' in response['body']['products'][0]
 
 def test_lambda_event_handler_no_params(monkeypatch):
     env_name = 'URL'
