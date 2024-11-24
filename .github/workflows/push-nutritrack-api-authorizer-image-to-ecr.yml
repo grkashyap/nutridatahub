@@ -15,6 +15,7 @@ jobs:
     - name: Build the Docker image
       run: |
         cd nutritrack-apis/api-authorizer
+        jq '.URL = "${{secrets.APP_URL}}"' src/config.json > tmp.json && mv tmp.json src/config.json
         docker build . --tag nutritrack-api/authorizer:latest
         docker tag nutritrack-api/authorizer:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/nutritrack-api/authorizer:latest
 
