@@ -6,9 +6,9 @@ WORKDIR ${LAMBDA_TASK_ROOT}
 
 ENV PYTHONPATH ${LAMBDA_TASK_ROOT}/src
 
-COPY requirements.txt .
+#COPY requirements.txt .
 
-RUN pip install -r requirements.txt
+#RUN pip install -r requirements.txt
 
 COPY ./src ./src
 
