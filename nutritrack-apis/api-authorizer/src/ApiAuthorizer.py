@@ -7,7 +7,7 @@ def lambda_handler(event, context):
     print(headers)
 
     # Get the 'Origin' or 'Referer' header
-    origin = headers.get('Origin') or headers.get('Referer')
+    origin = headers.get('origin') or headers.get('referer')
     print(origin)
 
     # Define the allowed origin (your S3 bucket URL)
