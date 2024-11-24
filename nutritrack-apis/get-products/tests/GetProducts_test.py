@@ -25,7 +25,7 @@ def test_valid_request(monkeypatch):
 
     response = GetProducts(search_term=search_term).get_all_products()
 
-    assert response['statusCode'] == 200
+    assert 'body' in response
 
 @responses.activate
 def test_invalid_request(monkeypatch):
@@ -39,8 +39,7 @@ def test_invalid_request(monkeypatch):
 
     response = GetProducts(search_term=search_term).get_all_products()
 
-    assert response['statusCode'] != 200
-    assert response['body'] == 'Error occurred while processing the request'
+    assert response['error'] == True
 
 
 def test_no_env_variables():
@@ -50,8 +49,7 @@ def test_no_env_variables():
 
     response = GetProducts(search_term=search_term).get_all_products()
 
-    assert response['statusCode'] != 200
-    assert response['body'] == 'Error occurred while processing the request'
+    assert response['error'] == True
 
 if __name__== '__main__':
     pytest.main()

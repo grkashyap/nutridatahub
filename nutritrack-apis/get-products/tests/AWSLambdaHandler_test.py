@@ -16,7 +16,7 @@ def test_lambda_event_handler(monkeypatch):
     }
 
     response = lambda_handler(event=event, context=None)
-
+    print(type(response))
     assert response['statusCode'] == 200
 
 def test_lambda_event_handler_no_params(monkeypatch):

@@ -1,5 +1,3 @@
-import ast
-import json
 import os
 import requests
 from src.utils.RequestException import RequestException
@@ -11,12 +9,13 @@ class GetProducts:
     # Declare variables
     search_term = None
     page_num = None
+    result = {}
     logger = logging.getLogger('Get Products')
 
     def __init__(self, search_term, page_num=1):
         """
         Initialize search term and page number variables
-        :param search_term: Search term for which the results has to be retrieved
+        :param search_term: Search term for which the results have to be retrieved
         :param page_num: Page number of search results. Defaulted to 1
         """
         self.search_term = search_term
@@ -30,20 +29,12 @@ class GetProducts:
 
         # send request to open food fact and return response
         try:
-            return self.__send_request()
+            self.__send_request()
         except RequestException as e:
             print(f'Error occurred while retrieving results: {e}')
+            self.result['error'] = True
 
-        # Default response. Processing should not reach here if the request is successful
-        return {
-            "statusCode": 500,
-            "headers": {
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST, GET'
-            },
-            "body": "Error occurred while processing the request"
-        }
+        return self.result
 
     def __send_request(self):
         """
@@ -58,29 +49,21 @@ class GetProducts:
         url = os.environ.get('URL')
 
         if url is None:
-            raise RequestException('URL parameter is not defined')
+            self.result['error'] = True
+            return
 
         # Send request
         try:
             response = requests.get(url=url, params=request_params, timeout=60, allow_redirects=False, headers=request_headers)
             response.raise_for_status()
 
-            print(response)
-
             if response.status_code == 200:
-                return {
-                    "statusCode": response.status_code,
-                    "headers": {
-                        'Access-Control-Allow-Headers': 'Content-Type',
-                        'Access-Control-Allow-Origin': '*',
-                        'Access-Control-Allow-Methods': 'POST, GET'
-                    },
-                    "body": json.dumps(response.json())
-                }
+                self.result['body'] = response.text
 
         except requests.exceptions.HTTPError as e:
-            raise RequestException(e)
-
+            print(e)
+            self.result['error'] = True
+            return
 
     def __prepare_params(self):
         """
@@ -95,6 +78,6 @@ class GetProducts:
                   'search_terms': self.search_term,
                   'page': self.page_num}
 
-        headers = {'User-Agent': 'nutritrack/1.0.0'}
+        headers = {'User-Agent': 'Nutri-track/1.0.0'}
 
         return params, headers
