@@ -4,21 +4,26 @@ import os
 def lambda_handler(event, context):
     # Extract headers from the incoming request
     headers = event.get('headers', {})
-    print(headers)
+    print('Headers: ',headers)
+
+    request_context = event.get('requestContext',{})
+    print('RequestContext',request_context)
 
     # Get the 'Origin' or 'Referer' header
     origin = headers.get('origin') or headers.get('referer')
-    print(origin)
+    print('origin: ',origin)
 
     # Define the allowed origin (your S3 bucket URL)
     allowed_origin = get_url()
-    print(allowed_origin)
+    print('Allowed Origin: ',allowed_origin)
 
     # Check if the 'Origin' or 'Referer' header starts with the allowed URL
     if origin and origin.startswith(allowed_origin):
+        print('Allow')
         # If the request comes from the allowed origin, allow the request
         return generate_policy('Allow', event)
     else:
+        print('Dont Allow')
         # If the request doesn't come from the allowed origin, deny the request
         return generate_policy('Deny', event)
 
@@ -34,7 +39,7 @@ def generate_policy(effect, event):
             'Statement': [{
                 'Action': 'execute-api:Invoke',  # Action allowed (Invoke API)
                 'Effect': effect,
-                'Resource': f'arn:aws:execute-api:{event["requestContext"]["accountId"]}:*/*/*/*'
+                'Resource': f'arn:aws:execute-api:*:{event["requestContext"]["accountId"]}:*/*/*/*'
             }]
         }
     }
