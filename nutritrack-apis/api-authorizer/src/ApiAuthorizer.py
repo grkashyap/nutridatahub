@@ -4,12 +4,15 @@ import os
 def lambda_handler(event, context):
     # Extract headers from the incoming request
     headers = event.get('headers', {})
+    print(headers)
 
     # Get the 'Origin' or 'Referer' header
     origin = headers.get('Origin') or headers.get('Referer')
+    print(origin)
 
     # Define the allowed origin (your S3 bucket URL)
     allowed_origin = get_url()
+    print(allowed_origin)
 
     # Check if the 'Origin' or 'Referer' header starts with the allowed URL
     if origin and origin.startswith(allowed_origin):
