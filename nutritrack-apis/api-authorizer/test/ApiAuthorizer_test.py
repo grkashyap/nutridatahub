@@ -10,7 +10,27 @@ test_data = [
                 "Origin": "http://localhost:3001",
                 "Referer": "http://localhost:3001"
             },
-            "methodArn": "arn:aws:execute-api:us-east-1:123456789012:abcde/GET/my-resource"
+            "requestContext": {
+                "path": "/request",
+                "accountId": "123456789012",
+                "resourceId": "05c7jb",
+                "stage": "test",
+                "requestId": "...",
+                "identity": {
+                  "apiKey": "...",
+                  "sourceIp": "...",
+                  "clientCert": {
+                    "clientCertPem": "CERT_CONTENT",
+                    "subjectDN": "www.example.com",
+                    "issuerDN": "Example issuer",
+                    "serialNumber": "a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1",
+                    "validity": {
+                      "notBefore": "May 28 12:30:02 2019 GMT",
+                      "notAfter": "Aug  5 09:36:04 2021 GMT"
+                    }
+                  }
+                }
+            }
         },
         "expected_policy_effect": "Allow"
     },
@@ -22,7 +42,27 @@ test_data = [
                 "Origin": "http://localhost:3002",
                 "Referer": "http://localhost:3002"
             },
-            "methodArn": "arn:aws:execute-api:us-east-1:123456789012:abcde/GET/my-resource"
+            "requestContext": {
+                "path": "/request",
+                "accountId": "123456789012",
+                "resourceId": "05c7jb",
+                "stage": "test",
+                "requestId": "...",
+                "identity": {
+                  "apiKey": "...",
+                  "sourceIp": "...",
+                  "clientCert": {
+                    "clientCertPem": "CERT_CONTENT",
+                    "subjectDN": "www.example.com",
+                    "issuerDN": "Example issuer",
+                    "serialNumber": "a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1",
+                    "validity": {
+                      "notBefore": "May 28 12:30:02 2019 GMT",
+                      "notAfter": "Aug  5 09:36:04 2021 GMT"
+                    }
+                  }
+                }
+            }
         },
         "expected_policy_effect": "Deny"
     },
@@ -31,7 +71,27 @@ test_data = [
     {
         "event": {
             "headers": {},
-            "methodArn": "arn:aws:execute-api:us-east-1:123456789012:abcde/GET/my-resource"
+            "requestContext": {
+                "path": "/request",
+                "accountId": "123456789012",
+                "resourceId": "05c7jb",
+                "stage": "test",
+                "requestId": "...",
+                "identity": {
+                  "apiKey": "...",
+                  "sourceIp": "...",
+                  "clientCert": {
+                    "clientCertPem": "CERT_CONTENT",
+                    "subjectDN": "www.example.com",
+                    "issuerDN": "Example issuer",
+                    "serialNumber": "a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1:a1",
+                    "validity": {
+                      "notBefore": "May 28 12:30:02 2019 GMT",
+                      "notAfter": "Aug  5 09:36:04 2021 GMT"
+                    }
+                  }
+                }
+            }
         },
         "expected_policy_effect": "Deny"
     }

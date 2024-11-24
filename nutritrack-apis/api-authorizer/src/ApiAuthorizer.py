@@ -31,7 +31,7 @@ def generate_policy(effect, event):
             'Statement': [{
                 'Action': 'execute-api:Invoke',  # Action allowed (Invoke API)
                 'Effect': effect,
-                'Resource': event['methodArn']  # The specific API method being invoked
+                'Resource': f'arn:aws:execute-api:{event["requestContext"]["accountId"]}:*/*/*/*'
             }]
         }
     }
@@ -43,5 +43,4 @@ def get_url():
 
     with open(file_path, 'r') as file:
         data = json.load(file)
-        print(data)
         return data['URL']
