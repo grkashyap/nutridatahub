@@ -16,7 +16,6 @@ function SearchField() {
         updatePageNumber(1);
         showLoading(true);
         const results = await GetProducts(searchTerm);
-        console.log('results: ',results);
         showLoading(false);
 
         if(!results) {
