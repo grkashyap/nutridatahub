@@ -4,10 +4,6 @@ import os
 def lambda_handler(event, context):
     # Extract headers from the incoming request
     headers = event.get('headers', {})
-    print('Headers: ',headers)
-
-    request_context = event.get('requestContext',{})
-    print('RequestContext',request_context)
 
     # Get the 'Origin' or 'Referer' header
     origin = headers.get('origin') or headers.get('referer')
@@ -19,11 +15,9 @@ def lambda_handler(event, context):
 
     # Check if the 'Origin' or 'Referer' header starts with the allowed URL
     if origin and origin.startswith(allowed_origin):
-        print('Allow')
         # If the request comes from the allowed origin, allow the request
         return generate_policy('Allow', event)
     else:
-        print('Dont Allow')
         # If the request doesn't come from the allowed origin, deny the request
         return generate_policy('Deny', event)
 
