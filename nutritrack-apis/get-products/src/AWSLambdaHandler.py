@@ -49,7 +49,7 @@ def prepare_response(status_code, result=None, error=None):
 
     # prepare headers
     response['headers']['Access-Control-Allow-Headers'] = 'Content-Type'
-    response['headers']['Access-Control-Allow-Origin'] = '*'
+    response['headers']['Access-Control-Allow-Origin'] = 'https://www.nutridatahub.com/'
     response['headers']['Access-Control-Allow-Methods'] = 'POST, GET'
     response['headers']['Content-Type'] = 'application/json'
 

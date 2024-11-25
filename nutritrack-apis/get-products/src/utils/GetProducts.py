@@ -78,6 +78,6 @@ class GetProducts:
                   'search_terms': self.search_term,
                   'page': self.page_num}
 
-        headers = {'User-Agent': 'Nutri-track/1.0.0'}
+        headers = {'User-Agent': 'NutriDataHub/1.0.0'}
 
         return params, headers
