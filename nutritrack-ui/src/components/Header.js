@@ -11,12 +11,12 @@ export default function Header() {
             <nav aria-label='Global' className='mx-auto flex items-center justify-between p-6 lg:px-8'>
                 <div className='flex lg:flex-1'>
                     <a href='/' className='-m-1.5 p-1.5 flex'>
-                        <span className='sr-only'>NutriTrack</span>
+                        <span className='sr-only'>NutriDataHub</span>
                         <img
                             alt=""
                             src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
                             className="h-6 w-auto" />
-                        <span className='antialiased sm:subpixel-antialiased md:antialiased uppercase pl-2'>NutriTrack</span>
+                        <span className='antialiased sm:subpixel-antialiased md:antialiased uppercase pl-2'>NutriDataHub</span>
                     </a>
                 </div>
                 <div className='flex lg:hidden'>
