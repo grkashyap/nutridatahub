@@ -14,9 +14,8 @@ export default function Header() {
                         <span className='sr-only'>NutriDataHub</span>
                         <img
                             alt=""
-                            src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-                            className="h-6 w-auto" />
-                        <span className='antialiased sm:subpixel-antialiased md:antialiased uppercase pl-2'>NutriDataHub</span>
+                            src="header.jpeg"
+                            className="h-12 w-auto" />
                     </a>
                 </div>
                 <div className='flex lg:hidden'>
@@ -29,10 +28,10 @@ export default function Header() {
                 </button>
                 </div>
                 <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                    <a href="/" className="text-sm/6 font-semibold text-blue-500 bg-opacity-100 hover:bg-red-200">
+                    <a href="/" className="text-sm/6 font-semibold text-blue-500 bg-opacity-100 hover:bg-green-200">
                         Log in <span aria-hidden="true">&rarr;</span>
                     </a>
-                    <a href="/" className="text-sm/6 font-semibold text-purple-500 ml-4 bg-opacity-100 hover:bg-red-200">
+                    <a href="/" className="text-sm/6 font-semibold text-purple-500 ml-4 bg-opacity-100 hover:bg-green-200">
                         Sign up <span aria-hidden="true">&uarr;</span>
                     </a>
                 </div>
