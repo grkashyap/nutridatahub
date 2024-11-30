@@ -1,7 +1,7 @@
 export default function ResultCard ({product} ) {
 
     const showDefaultImage = (event) => {
-        event.target.src = 'logo192.png'
+        event.target.src = 'No_Image_Available.jpg'
     }
 
     return (
