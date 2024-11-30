@@ -4,3 +4,4 @@ nutritrack-apis/get-products/src/utils/__pycache__
 nutritrack-apis/get-products/src/__pycache__/
 __pycache__/
 .aws-sam/
+nutritrack-ui/.hintrc
