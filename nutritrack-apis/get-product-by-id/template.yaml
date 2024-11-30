@@ -1,0 +1,64 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  GetProductByIdFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src.AWSLambdaHandler.lambda_handler
+      Runtime: python3.12
+      CodeUri: .
+      MemorySize: 128
+      Timeout: 30
+      Environment:
+        Variables:
+          STAGE: !Ref "AWS::Stage"
+          URL: 'https://world.openfoodfacts.org/api/v3/product/{product_id}.json'
+
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: GetProductByIdApi
+      StageName: prod
+      Cors:
+        AllowMethods: "'POST, GET'"
+        AllowHeaders: "'X-Forwarded-For'"
+        AllowOrigin: "'*'"
+      DefinitionBody:
+        swagger: '2.0'
+        info:
+          title: 'Get Product By Id API'
+          version: '1.0'
+        paths:
+          /product/{productId}:
+            get:
+              summary: 'Get Product By Id'
+              operationId: 'getProductById'
+              responses:
+                200:
+                  description: 'Successful response'
+                  schema:
+                    type: 'string'
+              x-amazon-apigateway-integration:
+                uri: !Sub arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${GetProductByIdFunction.Arn}/invocations
+                httpMethod: GET
+                type: aws_proxy
+
+  LambdaApiGatewayInvokePolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: LambdaApiGatewayInvokePolicy
+      Roles:
+        - !GetAtt GetProductByIdFunctionRole.Arn
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'lambda:InvokeFunction'
+            Resource: !GetAtt GetProductByIdFunction.Arn
+
+Outputs:
+  ApiUrl:
+    Description: 'API Gateway URL'
+    Value: !Sub 'https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/prod/product/{productId}'
