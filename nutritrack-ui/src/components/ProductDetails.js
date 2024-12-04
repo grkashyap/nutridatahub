@@ -37,6 +37,7 @@ export default function ProductDetails() {
         };
 
         fetchProductDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
     
     const handleBackButton = () => {
