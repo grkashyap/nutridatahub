@@ -21,16 +21,16 @@ def lambda_handler(event, context):
 
     # return an error if event is not populated
     if 'pathParameters' not in event or event['pathParameters'] is None:
-        logger.error('Path parameters are blank')
+        print('Path parameters are blank')
         return prepare_response(status_code=_ERROR_STATUS_CODE, error=_ERROR_MESSAGE)
 
     # return an error if search_term is not populated in query parameters
     if 'productId' not in event['pathParameters']:
-        logger.error('Product ID is blank')
+        print('Product ID is blank')
         return prepare_response(status_code=_ERROR_STATUS_CODE, error=_ERROR_PRODUCT_ID)
 
     product_id = event['pathParameters']['productId']
-    logger.info(f'product_id: {product_id}')
+    print(f'product_id: {product_id}')
 
     result = GetProductById(product_id=product_id).get_product_by_id()
 

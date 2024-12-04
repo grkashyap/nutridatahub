@@ -26,7 +26,7 @@ class GetProductById:
         try:
             self.__send_request()
         except Exception as e:
-            self.logger.error(f'Error occurred while processing the request: {e}')
+            print(f'Error occurred while processing the request: {e}')
             self.result['error'] = True
 
         return self.result
@@ -57,7 +57,7 @@ class GetProductById:
                 self.result['body'] = response.text
 
         except requests.exceptions.HTTPError as e:
-            logging.error(e)
+            print(e)
             self.result['error'] = True
             return
 
