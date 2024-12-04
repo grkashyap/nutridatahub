@@ -45,7 +45,7 @@ export default function SearchResults() {
         <div>
             {
                 loading && (
-                    <div className='flex space-x-2 justify-center items-center bg-white h-screen inset-0'>
+                    <div className='flex space-x-2 justify-center items-center bg-white bg-opacity-50 h-screen inset-0'>
                         <span className='sr-only'>Loading...</span>
                         <div className='h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.3s]'></div>
                         <div className='h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.15s]'></div>
@@ -56,13 +56,13 @@ export default function SearchResults() {
             {
                 !loading && (
                     <>
-                        <div className='grid grid-cols-4 gap-4 md:grid-cols-2 lg:grid-cols-4'>
+                        <div className='grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-4 m-4'>
                             {renderResults}
                         </div>
                         <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
                             <div className="flex flex-1 justify-between sm:hidden">
                                 <button onClick={previousPage} className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Previous</button>
-                                <div><p className="text-sm text-gray-700">Showing <span className="font-medium">{pageNumber}</span> of <span className="font-medium">{num_pages}</span> page(s)</p></div>
+                                <div><p className="text-sm text-gray-700 pt-2">Showing <span className="font-medium">{pageNumber}</span> of <span className="font-medium">{num_pages}</span> page(s)</p></div>
                                 <button onClick={nextPage} className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">Next</button>
                             </div>
                             <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">

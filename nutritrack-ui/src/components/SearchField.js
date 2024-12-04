@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { GetProducts } from "../utils/GetData";
 import ProductResultsContext from "../context/Products";
+import DOMPurify from 'dompurify';
 
 function SearchField() {
 
@@ -8,33 +9,40 @@ function SearchField() {
     const [loading, showLoading] = useState(false);
     const [error, showError] = useState(false);
 
-    const { updateSearchResults, updateSearchValue, updatePageNumber } = useContext(ProductResultsContext);
+    const { searchValue, updateSearchResults, updateSearchValue, updatePageNumber } = useContext(ProductResultsContext);
 
     const onFormSubmit = async (event) => {
         event.preventDefault();
-        updateSearchValue(searchTerm);
+        const sanitizedValue = DOMPurify.sanitize(searchTerm);
+        updateSearchValue(sanitizedValue);
         updatePageNumber(1);
         showLoading(true);
         const results = await GetProducts(searchTerm);
         showLoading(false);
 
-        if(!results) {
+        if(!results || !results.data || results.data.count === 0) {
             showError(true);
 
             setTimeout(() => {
                 showError(false);
             }, 5000);
+            return;
         }
-        updateSearchResults(results);
+
+        if(results.data.count > 0) {
+            updateSearchResults(results);
+        }
+        
     }
 
     const onInputValueChange = (event) => {
-        setSearchTermValue(event.target.value);
+        const sanitizedValue = DOMPurify.sanitize(event.target.value);
+        setSearchTermValue(sanitizedValue);
     }
 
     return (
         <>
-            <div className="col-span-4">
+            <div className="col-span-4 ml-4 mr-4 mt-4 mb-4">
                 <form onSubmit={onFormSubmit}>
                     <input 
                         className="justify-center placeholder:italic placeholder:text-slate-400 block bg-white w-full border border-slate-300 
@@ -42,7 +50,7 @@ function SearchField() {
                             focus:ring-sky-500 focus:ring-1 sm:text-sm" 
                         placeholder="Search for products..." 
                         type="text" 
-                        value={searchTerm}
+                        value={!searchTerm?searchValue:searchTerm}
                         onChange={onInputValueChange}
                         /> 
                 </form>
