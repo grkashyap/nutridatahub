@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { GetProducts } from "../utils/GetData";
 import ProductResultsContext from "../context/Products";
 import DOMPurify from 'dompurify';
@@ -10,6 +10,13 @@ function SearchField() {
     const [error, showError] = useState(false);
 
     const { searchValue, updateSearchResults, updateSearchValue, updatePageNumber } = useContext(ProductResultsContext);
+
+    useEffect(() => {
+        if(!searchTerm && searchValue) {
+            setSearchTermValue(searchValue);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
 
     const onFormSubmit = async (event) => {
         event.preventDefault();
@@ -50,7 +57,7 @@ function SearchField() {
                             focus:ring-sky-500 focus:ring-1 sm:text-sm" 
                         placeholder="Search for products..." 
                         type="text" 
-                        value={!searchTerm?searchValue:searchTerm}
+                        value={searchTerm}
                         onChange={onInputValueChange}
                         /> 
                 </form>
