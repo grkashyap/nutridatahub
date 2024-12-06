@@ -34,10 +34,10 @@ export default function ShowSearchUse() {
                     </p>
                 </div>
             </div>
-            <div className="grid grid-cols-1 gap-1 md:grid-cols-2 bg-brown pb-2">
+            <div className="grid grid-cols-1 gap-1 lg:grid-cols-2 bg-brown pb-2">
                 <div>
                     <div className="flex justify-center items-center">
-                        <svg className="w-full h-96 hidden md:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 800">
+                        <svg className="w-full h-96 hidden lg:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 800">
                             <defs>
                                 <marker id="arrowhead" viewBox="0 0 10 10" refX="5" refY="5" orient="auto" markerWidth="10" markerHeight="10">
                                     <polygon points="0,0 10,5 0,10" fill="black" />
@@ -48,7 +48,7 @@ export default function ShowSearchUse() {
                                 Search for Products
                             </text>
                         </svg>
-                        <p className="sm:hidden text-lg font-semibold text-black">
+                        <p className="lg:hidden text-lg font-semibold text-black">
                             Search for Products
                         </p>
                     </div>
@@ -59,8 +59,8 @@ export default function ShowSearchUse() {
                     </video>
                 </div>
             </div>
-            <div className="grid grid-cols-1 gap-1 md:grid-cols-2 bg-brown pb-2">
-                <p className="sm:hidden text-lg font-semibold text-black capitalize flex justify-center items-center">
+            <div className="grid grid-cols-1 gap-1 lg:grid-cols-2 bg-brown pb-2">
+                <p className="lg:hidden text-lg font-semibold text-black capitalize flex justify-center items-center">
                     View Product Details
                 </p>
                 <div className="ml-2 mr-4 mt-2 border-2 max-w-4xl max-h-2xl shadow-xl bg-white">
@@ -68,7 +68,7 @@ export default function ShowSearchUse() {
                 </div>
                 <div>
                     <div className="flex justify-center items-center">
-                        <svg className="w-full h-96 hidden md:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 800">
+                        <svg className="w-full h-96 hidden lg:block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 800">
                             <defs>
                                 <marker id="arrowhead" viewBox="0 0 10 10" refX="5" refY="5" orient="auto" markerWidth="10" markerHeight="10">
                                     <polygon points="0,0 10,5 0,10" fill="black" />
