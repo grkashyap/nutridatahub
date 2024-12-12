@@ -1,6 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { GetProductById } from '../utils/GetData';
+import { GetProductById } from '../../utils/GetData';
 import ImageCarousel from "./ImageCarousel";
 import ProductDetailsTab from "./ProductDetailsTabs";
 

@@ -98,6 +98,7 @@ export default function Signup() {
                     <div className="max-w-md w-full mx-auto border border-gray-300 rounded-2xl p-8 bg-white shadow-lg">
                         {isRegistering && !isVerifying && 
                             <div>
+                                <p className='text-center font-bold text-xl text-green-800 mb-4'>Create an account</p>
                                 <form onSubmit={handleRegister}>
                                     <div className="space-y-6">
                                         <div>
@@ -161,23 +162,24 @@ export default function Signup() {
                                 </p>
                             </div>
                         }
-                        { isVerifying && 
+                        { isVerifying &&
                             <div>
+                                <p className='text-center font-bold text-xl text-green-800 mb-4'>Enter verification code sent to your email</p>
                                 <form onSubmit={handleVerification}>
                                     <div className="space-y-6">
                                         <label className="text-gray-800 text-sm mb-2 block">Verification Code</label>
-                                        <input 
-                                            type="text" 
+                                        <input
+                                            type="text"
                                             className="text-gray-800 bg-white border border-gray-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500"
-                                            placeholder="Enter verification code" 
+                                            placeholder="Enter verification code"
                                             required
                                             value={verificationCode}
                                             onChange={(e) => setVerificationCode(e.target.value)}/>
                                     </div>
                                     <div className="!mt-12">
-                                        <button type="submit" 
-                                            className="w-full py-3 px-4 text-sm tracking-wider font-semibold rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
-                                            disabled={isLoading}>
+                                        <button type="submit"
+                                                className="w-full py-3 px-4 text-sm tracking-wider font-semibold rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
+                                                disabled={isLoading}>
                                             Verify
                                         </button>
                                     </div>

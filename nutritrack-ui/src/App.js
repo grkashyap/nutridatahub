@@ -1,9 +1,9 @@
 import './App.css';
 import Footer from './components/Footer';
 import Header from './components/Header';
-import SearchField from './components/SearchField';
-import SearchResults from './components/SearchResults';
-import ShowSearchUse from './components/ShowSearchUse';
+import SearchField from './components/ProductSearch/SearchField';
+import SearchResults from './components/ProductSearch/SearchResults';
+import ShowSearchUse from './components/ProductSearch/ShowSearchUse';
 
 function App() {
 

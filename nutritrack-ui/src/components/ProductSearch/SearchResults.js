@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
-import ProductResultsContext from '../context/Products';
+import ProductResultsContext from '../../context/Products';
 import ResultCard from './ResultCard';
-import { GetProducts } from '../utils/GetData';
+import { GetProducts } from '../../utils/GetData';
 
 export default function SearchResults() {
 

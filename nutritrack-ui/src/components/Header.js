@@ -44,14 +44,14 @@ export default function Header() {
                             <a href="/login" className="text-sm/6 font-semibold text-blue-500 bg-opacity-100 hover:bg-green-200">
                                 Log in <span aria-hidden="true">&rarr;</span>
                             </a>
-                            <a href="/signup" className="text-sm/6 font-semibold text-purple-500 ml-4 bg-opacity-100 hover:bg-green-200">
+                            <a href="/signup" className="text-sm/6 font-semibold text-purple-500 ml-4 bg-opacity-100 hover:bg-blue-100 hover:rounded-lg hover:shadow-lg">
                                 Sign up <span aria-hidden="true">&uarr;</span>
                             </a>
                         </div>
                     :
                         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                            <a href="/dashboard" className="text-sm/6 font-semibold text-blue-500 bg-opacity-100 hover:bg-green-200">
-                                {sessionStorage.getItem('name')}
+                            <a href="/dashboard" className="text-sm/6 font-semibold text-blue-500 bg-opacity-100 hover:bg-green-200 pr-2">
+                                Welcome {sessionStorage.getItem('name')}
                             </a>
                             <button onClick={handleLogout} className="text-sm/6 font-semibold text-blue-500 bg-opacity-100 hover:bg-green-200">
                                 Logout

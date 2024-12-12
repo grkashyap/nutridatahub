@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Login from './components/Login';
 import Signup from './components/Signup';
-import ProductDetails from './components/ProductDetails';
+import ProductDetails from './components/ProductDetails/ProductDetails';
 import { ProductResultsProvider } from './context/Products';
 import { motion, AnimatePresence } from 'motion/react';
 import { AuthContextProvider } from './context/AuthContext';

@@ -4,7 +4,9 @@ import { useState } from "react";
 import {
     CognitoIdentityProviderClient,
     InitiateAuthCommand,
-    GetUserCommand
+    GetUserCommand,
+    ForgotPasswordCommand,
+    ConfirmForgotPasswordCommand
   } from '@aws-sdk/client-cognito-identity-provider';
 import authConfig from '../resources/authConfig.json';
 import { useContext } from "react";
@@ -18,6 +20,10 @@ export default function Login() {
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(false);
     const [errMsg, setErrMsg] = useState(null);
+    const [forgotPassword, setForgotPassword] = useState(false);
+    const [isVerifying, setIsVerifying] = useState(false);
+    const [verificationCode, setVerificationCode] = useState(null);
+    const [cpassword, setCPassword] = useState('');
 
     const {updateAuthTokens, setUserDetails, isAuthenticated, login} = useContext(AuthContext);
 
@@ -72,6 +78,68 @@ export default function Login() {
         }
     };
 
+    const handleForgotPassword = async (e) => {
+        e.preventDefault();
+        setLoading(false);
+        setError(false);
+        setErrMsg(null);
+
+        const forgotPasswordCommand = new ForgotPasswordCommand({
+            ClientId: authConfig.ClientId,
+            Username: email,
+        });
+
+        try {
+            const response = await client.send(forgotPasswordCommand);
+            setForgotPassword(false);
+            setIsVerifying(true);
+            setLoading(false);
+        } catch(err) {
+            setError(true);
+            setErrMsg(err.message || 'Password reset failed');
+            setLoading(false);
+            return;
+        }
+    }
+
+    const handleVerification = async (e) => {
+        e.preventDefault();
+        setLoading(false);
+        setError(false);
+        setErrMsg(null);
+
+        if(password !== cpassword) {
+            setError(true);
+            setErrMsg("Password and Confirm Password doesn't match");
+            return;
+        }
+
+        const confirmForgotPassword = new ConfirmForgotPasswordCommand({
+            ClientId: authConfig.ClientId,
+            ConfirmationCode: verificationCode,
+            Password: password,
+            Username: email,
+        })
+
+        try {
+            const response = await client.send(confirmForgotPassword);
+            setForgotPassword(false);
+            setIsVerifying(false);
+            setError(false);
+            setErrMsg(null);
+            setLoading(false);
+            navigate('/login');
+            setEmail('');
+            setPassword('');
+        } catch(err) {
+            setError(true);
+            setErrMsg(err.message || 'Password reset failed');
+            setLoading(false);
+            return;
+        }
+
+    }
+
     return (
         <div className="flex flex-col flex-grow-0 md:container md:mx-auto shadow-xl min-h-screen bg-brown m-4">
             <Header />
@@ -87,39 +155,134 @@ export default function Login() {
                     )
                 }
                 {
-                    !loading && (
+                    !loading && !forgotPassword && !isVerifying && (
                         <div className="max-w-md w-full mx-auto border border-gray-300 rounded-2xl p-8 bg-white shadow-lg">
                             <div>
+                                <p className='text-center font-bold text-xl text-green-800 mb-4'>Login to your account</p>
                                 <form onSubmit={handleLogin}>
                                     <div className="space-y-6">
                                         <div>
                                             <label className="text-gray-800 text-sm mb-2 block">Email Id</label>
-                                            <input 
-                                                name="email" 
-                                                type="email" 
+                                            <input
+                                                name="email"
+                                                type="email"
                                                 className="text-gray-800 bg-white border border-gray-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500"
-                                                placeholder="Enter email" 
+                                                placeholder="Enter email"
                                                 required
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}/>
                                         </div>
                                         <div>
-                                            <label className="text-gray-800 text-sm mb-2 block">Password</label>
-                                            <input 
-                                                name="password" 
-                                                type="password" 
+                                            <label className="text-gray-800 text-sm mb-2">Password</label>
+                                            <input
+                                                name="password"
+                                                type="password"
                                                 required
-                                                className="text-gray-800 bg-white border border-gray-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500" 
-                                                placeholder="Enter password" 
+                                                className="text-gray-800 bg-white border border-gray-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500"
+                                                placeholder="Enter password"
                                                 value={password}
-                                                onChange={(e) =>  setPassword(e.target.value)}/>
+                                                onChange={(e) => setPassword(e.target.value)}/>
                                         </div>
                                         <div className="!mt-12">
-                                            <button type="submit" 
-                                                className="w-full py-3 px-4 text-sm tracking-wider font-semibold rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
+                                            <button type="submit"
+                                                    className="w-full py-3 px-4 text-sm tracking-wider font-semibold rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
                                                 Login
                                             </button>
                                         </div>
+                                        <div className='text-gray-800 text-sm mt-2 text-right cursor-pointer hover:underline hover:text-red-800'
+                                            onClick={(e) => setForgotPassword(true)}>
+                                            Forgot password ?
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )
+                }
+                {
+                    forgotPassword && (
+                        <div className="max-w-md w-full mx-auto border border-gray-300 rounded-2xl p-8 bg-white shadow-lg">
+                            <svg className="w-8 h-8 cursor-pointer" xmlns="http://www.w3.org/2000/svg"
+                                 fill="currentColor"
+                                 viewBox="0 0 16 16" onClick={(e) => setForgotPassword(false)}>
+                                <path fillRule="evenodd"
+                                      d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                            </svg>
+                            <div>
+                                <p className='text-center font-bold text-xl text-green-800 mb-4'>
+                                    Reset Password
+                                </p>
+                                <form onSubmit={handleForgotPassword}>
+                                    <div className="space-y-6">
+                                        <div>
+                                            <label className="text-gray-800 text-sm mb-2 block">Email Id</label>
+                                            <input
+                                                name="email"
+                                                type="email"
+                                                className="text-gray-800 bg-white border border-gray-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500"
+                                                placeholder="Enter email"
+                                                required
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}/>
+                                        </div>
+                                        <div className="!mt-12">
+                                            <button type="submit"
+                                                    className="w-full py-3 px-4 text-sm tracking-wider font-semibold rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
+                                                Submit
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )
+                }
+                {
+                    isVerifying && (
+                        <div className="max-w-md w-full mx-auto border border-gray-300 rounded-2xl p-8 bg-white shadow-lg">
+                            <div>
+                                <p className='text-center font-bold text-xl text-green-800 mb-4'>Reset Password</p>
+                                <form onSubmit={handleVerification}>
+                                    <div className="space-y-6">
+                                        <div>
+                                            <label className="text-gray-800 text-sm mb-2 block">Verification Code</label>
+                                            <input
+                                                type="text"
+                                                className="text-gray-800 bg-white border border-gray-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500"
+                                                placeholder="Enter verification code"
+                                                required
+                                                value={verificationCode}
+                                                onChange={(e) => setVerificationCode(e.target.value)}/>
+                                        </div>
+                                        <div>
+                                            <label className="text-gray-800 text-sm mb-2 block">Password</label>
+                                            <input
+                                                name="password"
+                                                type="password"
+                                                required
+                                                className="text-gray-800 bg-white border border-gray-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500"
+                                                placeholder="Enter password"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}/>
+                                        </div>
+                                        <div>
+                                            <label className="text-gray-800 text-sm mb-2 block">Confirm Password</label>
+                                            <input
+                                                name="cpassword"
+                                                type="password"
+                                                className="text-gray-800 bg-white border border-gray-300 w-full text-sm px-4 py-3 rounded-md outline-blue-500"
+                                                placeholder="Enter confirm password"
+                                                required
+                                                value={cpassword}
+                                                onChange={(e) => setCPassword(e.target.value)}/>
+                                        </div>
+                                    </div>
+                                    <div className="!mt-12">
+                                        <button type="submit"
+                                                className="w-full py-3 px-4 text-sm tracking-wider font-semibold rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
+                                                disabled={loading}>
+                                            Verify
+                                        </button>
                                     </div>
                                 </form>
                             </div>
@@ -130,14 +293,16 @@ export default function Login() {
                     loading && (
                         <div className='flex space-x-2 justify-center items-center bg-white h-screen'>
                             <span className='sr-only'>Loading...</span>
-                            <div className='h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.3s]'></div>
-                            <div className='h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.15s]'></div>
+                            <div
+                                className='h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.3s]'></div>
+                            <div
+                                className='h-8 w-8 bg-black rounded-full animate-bounce [animation-delay:-0.15s]'></div>
                             <div className='h-8 w-8 bg-black rounded-full animate-bounce'></div>
                         </div>
                     )
                 }
             </div>
-            <Footer />
+            <Footer/>
         </div>
     );
 }

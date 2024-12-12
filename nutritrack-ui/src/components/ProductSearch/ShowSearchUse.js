@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import ProductResultsContext from "../context/Products";
+import ProductResultsContext from "../../context/Products";
 
 export default function ShowSearchUse() {
 

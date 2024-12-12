@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
-import { GetProducts } from "../utils/GetData";
-import ProductResultsContext from "../context/Products";
+import { GetProducts } from "../../utils/GetData";
+import ProductResultsContext from "../../context/Products";
 import DOMPurify from 'dompurify';
 
 function SearchField() {
