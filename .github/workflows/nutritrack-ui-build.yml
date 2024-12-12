@@ -4,9 +4,6 @@
 name: Build nutritrack-ui and push to s3 bucket
 
 on:
-  push:
-    paths:
-      - 'nutritrack-ui/*'
   workflow_dispatch:
 
 jobs:
